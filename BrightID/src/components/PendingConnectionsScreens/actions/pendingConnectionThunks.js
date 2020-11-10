@@ -13,7 +13,10 @@ import {
   selectPendingConnectionById,
   updatePendingConnection,
 } from '@/components/PendingConnectionsScreens/pendingConnectionSlice';
-import { leaveChannel } from '@/components/PendingConnectionsScreens/actions/channelThunks';
+import {
+  encryptAndUploadProfileToChannel,
+  leaveChannel
+} from '@/components/PendingConnectionsScreens/actions/channelThunks';
 
 export const confirmPendingConnectionThunk = (
   id: string,
@@ -47,15 +50,15 @@ export const confirmPendingConnectionThunk = (
     user: { id: brightId, backupCompleted },
   } = getState();
 
-  let connectionTimestamp = Date.now();
+  let connectionTimestamp = connection.profileTimestamp;
   let flagReason;
-
   await api.addConnection(
     brightId,
     connection.brightId,
     level,
     flagReason,
     connectionTimestamp,
+    connection.requestProof
   );
 
   if (__DEV__) {
@@ -67,12 +70,14 @@ export const confirmPendingConnectionThunk = (
         level,
         flagReason,
         connectionTimestamp,
+        connection.requestProof,
         {
           id: connection.brightId,
           secretKey: connection.secretKey,
         },
       );
     }
+
   }
 
   // save connection photo
@@ -96,6 +101,20 @@ export const confirmPendingConnectionThunk = (
 
   dispatch(addConnection(connectionData));
   dispatch(confirmPendingConnection(connection.id));
+  if (
+    // the user is not creator of channel
+    channel.initiatorProfileId !== channel.myProfileId &&
+    // and the user accepted the connection
+    level != 'suspicious' && level != 'reported' && (
+      // and the channel is 1:1
+      channel.type === channel_types.SINGLE ||
+      // or the user is accepting connection with the initiator
+      channel.initiatorProfileId === connection.id
+    )) {
+    // upload profile of joiner to channel
+    // only after accepting the connection with creator
+    await dispatch(encryptAndUploadProfileToChannel(channel.id));
+  }
 
   if (channel.type === channel_types.SINGLE) {
     // Connection is established, so the 1:1 channel can be left
