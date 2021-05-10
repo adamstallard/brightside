@@ -19,8 +19,8 @@ import { createSelector } from '@reduxjs/toolkit';
 import Spinner from 'react-native-spinkit';
 import i18next from 'i18next';
 import { NodeApiContext } from '@/components/NodeApiGate';
-import { createNewGroup } from '../actions';
-import NewGroupCard from './NewGroupCard';
+import { createNewGroup } from './actions';
+import NewMemberCard from './NewMemberCard';
 
 // type State = {
 //   creating: boolean,
@@ -50,7 +50,7 @@ const creationStateStrings = {
   creatingGroup: i18next.t('groups.state.creatingGroup', 'creating the group…'),
 };
 
-export class NewGroupScreen extends React.Component {
+export class CreateGroupScreen extends React.Component {
   // make api available through this.context
   static contextType = NodeApiContext;
 
@@ -131,7 +131,7 @@ export class NewGroupScreen extends React.Component {
   };
 
   renderConnection = ({ item }) => (
-    <NewGroupCard
+    <NewMemberCard
       {...item}
       selected={this.cardIsSelected(item)}
       groups={true}
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     borderTopColor: LIGHT_GREY,
   },
   emptyText: {
-    fontFamily: 'ApexNew-Book',
+    fontFamily: 'Poppins-Bold',
     fontSize: fontSize[20],
   },
   moreIcon: {
@@ -294,4 +294,4 @@ const styles = StyleSheet.create({
 export default connect((state) => ({
   newGroupCoFounders: state.groups.newGroupCoFounders,
   connections: verifiedConnectionsSelector(state),
-}))(withTranslation()(NewGroupScreen));
+}))(withTranslation()(CreateGroupScreen));

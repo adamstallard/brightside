@@ -148,7 +148,9 @@
       "title": "Select photo"
     },
     "placeholder": {
-      "searchConnections": "Search Connections"
+      "searchConnections": "Search Connections",
+      "searchGroups": "Search Groups",
+      "searchMembers": "Search Members"
     },
     "tag": {
       "connectionDate": "Connected {{date}}",
@@ -360,14 +362,18 @@
       "uploadingGroupPhoto": "uploading group photo"
     },
     "tag": {
-      "primaryGroup": "Primary Group"
+      "primaryGroup": "Primary Group",
+      "joinedDate": "Joined {{date}}",
+      "createdDate": "Created {{date}}"
     },
     "text": {
       "noEligibleConnection": "No existing connections are eligible for this group, please come back later..",
       "noGroups": "<text>Get verified faster</text><text>by creating and</text><text>joining groups</text>",
       "noGroupsMatchSearch": "No group matches your search",
       "noMembers": "No known members, invite some…",
-      "waitingForMembers": "Waiting for {{list}} to join"
+      "waitingForMembers": "Waiting for {{list}} to join",
+      "members": "{{count}} members",
+      "membersCount": "{{count}} Group members"
     }
   },
   "home": {
